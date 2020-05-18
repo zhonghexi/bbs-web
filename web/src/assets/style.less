@@ -1,0 +1,146 @@
+ul {
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none;
+}
+
+a{
+    color: #666;
+    &:active, &:hover {
+        color: #769912;
+    }
+}
+
+cite {
+    font-style: normal;
+}
+
+
+.container {
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.box {
+    margin-bottom: 1rem;
+    background-color: #fff;
+    h2{
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px dotted #ddd;
+        line-height: 50px;
+        margin-bottom: 0;
+        font-size: 1rem;
+        span {
+            padding-left: 1rem;
+            a {
+                color: #214e98;
+                &:hover {
+                    color: #769912;
+                }
+            }
+            a.active {
+                color: #769912;
+            }
+        }
+        .action {
+            padding-right: 1rem;
+        }
+    }
+    .box-body {
+        background-color: #fff;
+    }
+    .box-footer {
+        padding: 1rem;
+    }
+}
+
+.clearfix:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+/** 帖子列表 */
+.topic-item {
+    display: flex;
+    justify-self: start;
+    padding: .5rem 1rem;
+    border-bottom: 1px dotted #ddd;
+
+    &:last-child {
+        border-bottom: 0;
+    }
+
+    .avatar {
+        width: 48px;
+        height: 48px;
+        overflow: hidden;
+        img {
+            width: 48px;
+        }
+    }
+
+    .topic-info {
+        margin-left: 1rem;
+
+        .ant-badge {
+            margin-right: .5rem;
+        }
+
+        .author {
+            color: #999;
+
+            time {
+                margin-left: 1rem;
+            }
+
+            span {
+                margin-left: 1rem;
+            }
+        }
+
+    }
+
+}
+
+.more {
+    line-height: 80px;
+    text-align: center;
+    .btn-more {
+        padding: .5rem 1rem;
+        border: 1px solid #769912;
+        border-radius: 4px;
+    }
+}
+
+/* 本周热议 */
+.week-hot {
+    padding: 1rem;
+    li {
+        padding-bottom: .5rem;
+        span {
+            margin-left: .5rem;
+            color: #999;
+        }
+    }
+}
+
+/* 广告 */
+.advert {
+    padding: 1rem;
+    li {
+        margin-bottom: 1rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        img {
+            width: 100%;
+        }
+    }
+}
