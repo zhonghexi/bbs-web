@@ -146,9 +146,12 @@ class UserService {
             return false
         }
 
-        let avatar = '';
+        let avatar = '', num = parseInt(10 * Math.random());
+        if(10 > num) {
+            num = '0' + num
+        }
         if(undefined == param.avatar) {
-            avatar = 'assets/avatar/' + parseInt(10 * Math.random()) + '.jpg'
+            avatar = 'avatar/' + num + '.jpg'
         } else {
             avatar = params.avatar
         }

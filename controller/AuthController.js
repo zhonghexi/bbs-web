@@ -106,6 +106,10 @@ class AuthController {
         }
     }
 
+    async preview(ctx) {
+        util.ok(ctx)
+    }
+
     async upload(ctx) {
         let file = ctx.request.files.file
         let info = await util.upload(file)

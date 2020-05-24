@@ -38,14 +38,8 @@ export default {
     name: 'Header',
     data() {
         return {
-            userInfo: null,
+            userInfo: this.$store.state.user,
             imgUrl: this.env.imgUrl
-        }
-    },
-    mounted() {
-        let info = localStorage.getItem('userInfo')
-        if(info) {
-            this.userInfo = JSON.parse(info)
         }
     },
     methods: {
@@ -55,10 +49,11 @@ export default {
                 method: 'post'
             }).then(res => {
                 if(1000 == res.data.code) {
-                    this.userInfo = {}
+                    this.userInfo = null
                     localStorage.clear()
+                    this.$store.commit('updateUser', null)
                     this.$message.success('成功退出！')
-                    this.$router.push('/')
+                    this.$router.push('/auth/login')
                 } else {
                     this.$message.error('退出失败，请重试！')
                 }

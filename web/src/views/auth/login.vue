@@ -35,7 +35,9 @@
                             ] }
                         ]" type="password" placeholder="密码" />
                     </a-form-item>
-                    <a-button type="primary" html-type="submit">登录</a-button>
+                    <a-form-item>
+                        <a-button type="primary" html-type="submit" style="width: 100%">登录</a-button>
+                    </a-form-item>
                 </a-form>
             </div>
         </div>
@@ -93,9 +95,10 @@ export default {
                     }).then(res => {
                         switch(res.data.code) {
                             case 1100:
-                                localStorage.setItem('userInfo', JSON.stringify(res.data.info))
+                                localStorage.setItem('user', JSON.stringify(res.data.info))
                                 this.$message.success('登录成功')
                                 this.$router.push('/')
+                                this.$store.commit('updateUser', res.data.info)
                                 break
                             case 2501:
                                 this.$message.error('账号或密码错误')

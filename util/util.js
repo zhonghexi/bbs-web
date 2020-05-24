@@ -46,7 +46,7 @@ module.exports = {
     upload: async (file) => {
         const reader = fs.createReadStream(file.path)
 
-        let upPath = path.join(__dirname, '../../') + `upload${path.sep}`
+        let upPath = path.join(__dirname, '../') + `upload${path.sep}`
         let date = new Date()
         upPath += `${date.getFullYear()}${path.sep}`
         if(fs.existsSync(upPath)) {

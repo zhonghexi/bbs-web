@@ -180,7 +180,7 @@ export default {
                 params: {
                     page: 1,
                     pageSize: 50,
-                    topicId: 1
+                    topicId: this.$route.query.id
                 }
             }).then(res => {
                 if(1200 == res.data.code) {

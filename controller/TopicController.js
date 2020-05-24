@@ -83,6 +83,26 @@ class TopicController {
         util.okHasInfo(ctx, ret);
     }
 
+    async setSection(ctx) {
+        let rule = {
+            sectionId: {
+                numericality: true
+            }
+        }
+        let info = validate(ctx.query, rule)
+        if(info) {
+            util.failHasDesc(ctx, 2100, info)
+            return
+        }
+
+        let ret = await ctx.service.Topic.section();
+        if(ret) {
+            util.ok(ctx)
+        } else {
+            util.fail(ctx)
+        }
+    }
+
     // 删除
     async delInfo(ctx) {
         let rule = {
@@ -95,7 +115,7 @@ class TopicController {
             util.failHasDesc(ctx, 2100, info)
             return
         }
-        ret = await ctx.service.Topic.delete();
+        let ret = await ctx.service.Topic.delete();
         if(ret) {
             util.ok(ctx)
         } else {

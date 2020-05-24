@@ -6,11 +6,8 @@
         <a-row :gutter="16">
             <a-col :span="16">
                 <a-carousel autoplay>
-                    <a class="slide" href="javascript:;">
-                        <img src="../assets/images/2268908537.jpg">
-                    </a>
-                    <a class="slide" href="javascript:;">
-                        <img src="../assets/images/2268908537.jpg">
+                    <a class="slide" v-for="item in topAd" :key="item.id" href="javascript:;">
+                        <img :src="imgUrl + item.assets">
                     </a>
                 </a-carousel>
 
@@ -189,18 +186,19 @@ export default {
             visible: false,
             isLogin: false,
             adList: [],
+            topAd: [],
             rankList: [],
             imgUrl: this.env.imgUrl
         }
     },
     mounted() {
-        let info = localStorage.getItem('userInfo')
-        if(info) {
+        if(this.$store.state.user) {
             this.isLogin = true
         }
         this.getTop()
-        this.getTopic()
+        this.getTopic(2)
         this.getRank()
+        this.getTopAd()
     },
     methods: {
         // 置顶
@@ -276,6 +274,22 @@ export default {
             }).then(res => {
                 if(1200 == res.data.code) {
                     this.adList = res.data.list
+                }
+            })
+        },
+        getTopAd() {
+            this.$http({
+                url: '/api/advert/getList',
+                method: 'get',
+                params: {
+                    page: 1,
+                    pageSize: 2,
+                    place: 'home-top',
+                    type: 1
+                }
+            }).then(res => {
+                if(1200 == res.data.code) {
+                    this.topAd = res.data.list
                 }
             })
         },

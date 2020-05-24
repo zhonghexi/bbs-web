@@ -64,6 +64,12 @@ class TopicService {
             ]
         }
 
+        if(undefined != param.kw) {
+            condition.where.title = {
+                [Op.like]: `${param.kw}%`
+            }
+        }
+
         if(undefined != param.sectionId) {
             condition.where.section_id = Number(param.sectionId)
         }
@@ -134,6 +140,21 @@ class TopicService {
         }
         if(undefined != params.flag) {
             data.flag = params.flag
+        }
+        let condition = {
+            where: {
+                id: params.id,
+                userId: ctx.session.user.userId
+            }
+        }
+        return await ctx.model.topic.update(data, condition)
+    }
+
+    async section() {
+        const {ctx} = this
+        let params = ctx.request.body
+        let data = {
+            sectionId: params.sectionId
         }
         let condition = {
             where: {

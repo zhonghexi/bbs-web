@@ -44,7 +44,7 @@
                         ]" type="password" placeholder="密码" />
                     </a-form-item>
                     <a-form-item>
-                        <a-button type="primary" html-type="submit">注册</a-button>
+                        <a-button type="primary" html-type="submit" style="width: 100%">注册</a-button>
                     </a-form-item>
                 </a-form>
             </div>
@@ -106,6 +106,7 @@ export default {
                             case 1100:
                                 this.$message.success('注册成功')
                                 localStorage.setItem('user', JSON.stringify(res.data.info))
+                                this.$store.commit('updateUser', res.data.info)
                                 this.$router.push('/')
                                 break
                             case 2501:

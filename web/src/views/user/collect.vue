@@ -14,7 +14,7 @@
             <a-col :span="6" v-for="item in topicList" :key="item.id">
                 <div class="c-item">
                     <h3><router-link :to="'/topic/detail?id=' + item.id">{{item.title}}</router-link></h3>
-                    <p v-html="item.detail"></p>
+                    <div class="c-detail" v-html="item.detail"></div>
                 </div>
             </a-col>
         </a-row>
@@ -23,7 +23,7 @@
             <a-col :span="6" v-for="item in collectList" :key="item.id">
                 <div class="c-item">
                     <h3><router-link :to="'/topic/detail?id' + item.id">{{item.title}}</router-link></h3>
-                    <p v-html="item.detail"></p>
+                    <div class="c-detail" v-html="item.detail"></div>
                     <a class="iconfont cancel" v-if="item.user_id == loginInfo.id" title="取消收藏">&#xe69f;</a>
                 </div>
             </a-col>
@@ -48,7 +48,7 @@ export default {
             imgUrl: this.env.imgUrl,
             userInfo: {},
             topicList: [],
-            loginInfo: {},
+            loginInfo: this.$store.state.user,
             collectList: []
         }
     },
@@ -169,7 +169,7 @@ export default {
             text-overflow: ellipsis;
         }
 
-        p {
+        .c-detail {
             display: inline-block;
             height: 60px;
             line-height: 20px;

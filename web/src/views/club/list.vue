@@ -37,7 +37,7 @@
                             <a-upload v-decorator="[
                                 'cover',
                                 { rules: [{ required: true, message: 'Please input your name' }] },
-                                ]" list-type="picture-card" :show-upload-list="false" action="https://www.mocky.io/v2/5cc8019d300000980a055e76" :before-upload="beforeUpload" @change="handleChange">
+                                ]" list-type="picture-card" :show-upload-list="false" action="/api/auth/preview" :before-upload="beforeUpload" @change="handleChange">
                                 <img v-if="imageUrl" :src="imageUrl" alt="avatar" />
                                 <div v-else>
                                     <a-icon :type="loading ? 'loading' : 'plus'" />

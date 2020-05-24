@@ -14,7 +14,9 @@ module.exports = app => {
 
     router.get('/topic/getList', controller.Topic.getList)
     router.get('/topic/getInfo', controller.Topic.getInfo)
+    router.get('/topic/delete', controller.Topic.delInfo)
     router.post('/topic/setInfo', controller.Topic.setInfo)
+    router.post('/topic/setSection', controller.Topic.setSection)
 
     router.get('/reply/getList', controller.Reply.getList)
     router.post('/reply/setInfo', controller.Reply.setInfo)
@@ -33,6 +35,7 @@ module.exports = app => {
     router.get('/auth/captcha', controller.Auth.captcha)
     router.post('/auth/upload', controller.Auth.upload)
     router.post('/auth/logout', controller.Auth.logout)
+    router.post('/auth/preview', controller.Auth.preview)
 
     return router.routes()
 }

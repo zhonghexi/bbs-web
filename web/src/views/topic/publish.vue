@@ -14,8 +14,8 @@
                     <i class="iconfont">&#xe6fb;</i>
                     <span>最新帖子</span>
                 </a>
-                <router-link class="m-item" to="/user/collect">
-                    <i class="iconfont">&#xe668;</i>
+                <router-link class="m-item" :to="'/user/collect?userId=' + userInfo.userId + '&username=' + userInfo.username">
+                    <i class="iconfont">&#xe667;</i>
                     <span>我的收藏</span>
                 </router-link>
                 <div class="s-menu">
@@ -66,21 +66,33 @@
                     <a class="iconfont" title="预览">&#xe633;</a>
                     <a-dropdown :trigger="['click']">
                         <a class="iconfont" @click="e => e.preventDefault()" title="公布范围">&#xe7ce;</a>
-                        <a-menu slot="overlay">
-                            <a-menu-item>
-                                <a href="javascript:;">不作限制</a>
+                        <a-menu slot="overlay" @click="setScope">
+                            <a-menu-item key="0">
+                                不作限制
                             </a-menu-item>
-                            <a-menu-item>
-                                <a href="javascript:;">仅限社区</a>
+                            <a-menu-item key="1">
+                                仅限社区
                             </a-menu-item>
-                            <a-menu-item>
-                                <a href="javascript:;">仅限自己</a>
+                            <a-menu-item key="2">
+                                仅限自己
                             </a-menu-item>
                         </a-menu>
                     </a-dropdown>
-                    <a class="more">
-                        <i class="iconfont">&#xe6ad;</i>
-                    </a>
+                    <a-dropdown :trigger="['click']">
+                        <a class="iconfont" @click="e => e.preventDefault()" title="更多">&#xe6ad;</a>
+                        <a-menu slot="overlay" @click="setMore">
+                            <a-menu-item key="0">
+                                移动到
+                            </a-menu-item>
+                            <a-modal title="移动到" :visible="0 == moreKey" @ok="setSection" @cancel="onClose" okText="确定" cancelText="取消">
+                                <a-directory-tree default-expand-all :defaultSelectedKeys="[topicInfo.sectionId]" @select="onSelect">
+                                    <a-tree-node key="1" title="默认">
+                                        <a-tree-node v-for="item in sectionList" :key="item.id" :title="item.name" is-leaf />
+                                    </a-tree-node>
+                                </a-directory-tree>
+                            </a-modal>
+                        </a-menu>
+                    </a-dropdown>
                 </span>
             </div>
             <div class="body">
@@ -109,14 +121,15 @@ export default {
             topicList: [],
             topicInfo: {},
             activeInfo: 0,
-            keyword: null
+            keyword: null,
+            moreKey: null,
+            sectionId: 2,
+            userInfo: this.$store.state.user
         }
     },
     mounted() {
         this.editor = this.initEditor()
         this.getSection()
-        this.getTopic()
-
         // let toolbar = this.editor.getUI().getToolbar()
     },
     methods: {
@@ -168,29 +181,44 @@ export default {
             }).then(res => {
                 if (1200 == res.data.code) {
                     this.sectionList = res.data.list
+                    if (0 < this.sectionList.length) {
+                        this.getTopic({
+                            sectionId: this.sectionList[0].id
+                        })
+                    } else {
+                        this.getTopic({
+                            sectionId: 0
+                        })
+                    }
                 }
             })
         },
 
         onSearch(e) {
             e.preventDefault()
-            this.getTopic({kw: this.keyword})
+            this.getTopic({
+                kw: this.keyword
+            })
         },
 
         getTopic(params = {}) {
             this.activeInfo = 0
-            if(params.sectionId) {
+            if (params.sectionId) {
                 this.activeInfo = params.sectionId
+                this.sectionId = params.sectionId
             }
 
-            if(params.flag) {
+            if (params.flag) {
                 this.activeInfo = -1
             }
-            
+
             this.topicList = []
             this.topicInfo = {}
             this.editor.setHtml(null)
-            params = Object.assign({page: 1, pageSize: 50}, params)
+            params = Object.assign({
+                page: 1,
+                pageSize: 50
+            }, params)
             this.$http({
                 url: '/api/topic/getList',
                 method: 'get',
@@ -198,7 +226,7 @@ export default {
             }).then(res => {
                 if (1200 == res.data.code) {
                     this.topicList = res.data.list
-                    if(0 < this.topicList.length) {
+                    if (0 < this.topicList.length) {
                         this.topicInfo = this.topicList[0]
                         this.editor.setHtml(this.topicInfo.detail)
                     }
@@ -211,7 +239,9 @@ export default {
                 title: this.topicInfo.title,
                 detail: this.editor.getHtml(),
                 sectionId: this.topicInfo.sectionId,
-                scope: this.topicInfo.scope
+                scope: this.topicInfo.scope,
+                flag: 2,
+                isTop: 0
             }
             if (this.topicInfo) {
                 data.id = this.topicInfo.id
@@ -222,25 +252,58 @@ export default {
                 data: data
             }).then(res => {
                 if (1100 == res.data.code) {
-                    this.$message.success('发布成功')
+                    this.$message.success('保存成功')
                 } else {
-                    this.$message.error('fafa')
+                    this.$message.error(res.data.desc)
                 }
             })
         },
 
         showTopic(idx = null) {
-            if(undefined != idx) {
+            if (undefined != idx) {
                 this.topicInfo = this.topicList[idx]
                 this.editor.setHtml(this.topicInfo.detail)
             } else {
                 this.topicInfo = {
                     title: '无标题帖子',
-                    detail: null
+                    detail: null,
+                    sectionId: this.sectionId
                 }
                 this.editor.setHtml(null)
             }
-            
+        },
+
+        setScope({
+            key
+        }) {
+            this.topicInfo.scope = key
+        },
+
+        setMore({key}) {
+            this.moreKey = key
+            console.log(this.topicInfo)
+        },
+
+        onSelect(keys) {
+            this.sectionId = keys[0]
+        },
+
+        setSection() {
+            let data = {
+                id: this.topicInfo.id,
+                sectionId: this.sectionId
+            }
+            this.$http({
+                url: '/api/topic/setSection',
+                method: 'post',
+                data: data
+            }).then(res => {
+                if(1000 == res.data.code) {
+                    this.$message.success('移动成功')
+                    this.getSection()
+                    this.onClose()
+                }
+            })
         },
 
         // 删除帖子
@@ -254,8 +317,13 @@ export default {
             }).then(res => {
                 if (1000 == res.data.code) {
                     this.$message.success('删除成功')
+                    this.getSection()
                 }
             })
+        },
+
+        onClose() {
+            this.moreKey = null
         }
     }
 }
@@ -332,6 +400,7 @@ export default {
             span {
                 margin-left: 40px;
             }
+
             &.active {
                 color: #fff;
                 background-color: #214e98;
@@ -464,6 +533,7 @@ export default {
 
         .operate {
             min-width: 180px;
+            padding-right: 1rem;
 
             a {
                 margin-left: 1rem;

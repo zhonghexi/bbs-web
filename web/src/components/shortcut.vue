@@ -3,9 +3,11 @@
     <div class="container">
         <nav>
             <router-link v-for="item in sectionList" :key="item.id" :to="'/section?id='+item.id" exact>{{item.name}}</router-link>
+            <template v-if="userInfo">
             <a-divider type="vertical" />
             <router-link to="/topic/publish">我发表的贴</router-link>
-            <router-link to="/topic/publish">我收藏的贴</router-link>
+            <router-link :to="'/user/collect?username=' + userInfo.username + '&userId=' + userInfo.userId">我收藏的贴</router-link>
+            </template>
         </nav>
         <form class="filter">
             <!-- <div class="input-filter">
@@ -29,7 +31,8 @@ export default {
     },
     data() {
         return {
-            sectionList: []
+            sectionList: [],
+            userInfo: this.$store.state.user
         }
     },
     mounted() {

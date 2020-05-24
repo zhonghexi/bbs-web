@@ -25,9 +25,7 @@
                             <i class="iconfont">&#xe615;</i>&nbsp;收藏
                         </a>
                     </div>
-                    <div class="topic-detail" :to="'/topic/detail?id=' + item.id">
-                        {{item.detail}}
-                    </div>
+                    <div class="topic-detail" v-html="item.detail"></div>
                 </div>
             </a-col>
             <a-col :span="8">

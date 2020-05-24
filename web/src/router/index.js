@@ -71,14 +71,7 @@ const routes = [
             path: 'publish',
             name: 'Publish',
             meta: { title: '篱笆客_发表贴子' },
-            component: () => import('../views/topic/publish'),
-            beforeEnter: (to, from, next) => {
-                // if() {
-
-                // }
-                console.log(to, from, next)
-                next()
-            }
+            component: () => import('../views/topic/publish')
         },{
             path: 'detail',
             name: 'Detail',
@@ -92,6 +85,16 @@ const router = new VueRouter({
     mode: 'history',
     linkActiveClass: 'active',
     routes
+})
+
+router.beforeEach((to, from, next) => {
+    let allow = ['Publish']
+    if(allow.indexOf(to.name) >= 0) {
+        if(!localStorage.getItem('user')) {
+            router.push('/auth/login')
+        }
+    }
+    next()
 })
 
 export default router
