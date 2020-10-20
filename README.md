@@ -28,3 +28,8 @@ npm run build
 ```
 生成的dist目录放线上服务器，配置好相关nginx
 
+
+### 线上示例
+```
+http://www.libake.com
+```
