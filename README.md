@@ -26,8 +26,52 @@ pm2 start -d npm -- run serve
 ```
 npm run build
 ```
-生成的dist目录放线上服务器，配置好相关nginx
+生成的dist目录放线上服务器，Nginx配置如下：
+```
+server {
+        listen       80;
+        server_name  demo.libake.com; # 更换域名
 
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        set $root_path '/home/libake/web';
+
+        location / {
+            root   $root_path;
+            index  index.html index.htm;
+            try_files $uri $uri/ /index.html;
+        }
+
+        location /api {
+            proxy_pass  http://127.0.0.1:4000;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://127.0.0.1;
+        #}
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+}
+```
+ *** 注：图像相关静态资源用了单独的域名部署
 
 ### 线上示例
 ```
