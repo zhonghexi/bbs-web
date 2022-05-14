@@ -31,5 +31,5 @@ npm run build
 
 ### 线上示例
 ```
-http://www.libake.com
+http://demo.libake.com
 ```
