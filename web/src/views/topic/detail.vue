@@ -123,12 +123,18 @@ export default {
             advertList: []
         }
     },
+    watch: {
+        $route(to){
+            console.log(to.path);
+            this.getTopic();
+        }
+    },
     mounted() {
         this.editor = this.initEditor()
-        this.getTopic()
-        this.getReply()
-        this.getRank()
-        this.getAdvert()
+        this.getTopic();
+        this.getReply();
+        this.getRank();
+        this.getAdvert();
     },
     methods: {
         initEditor(option = null) {
@@ -151,7 +157,7 @@ export default {
                     ]
                 }
             }
-            
+
             return new Editor(option)
         },
 
@@ -209,7 +215,7 @@ export default {
                 }
             })
         },
-        
+
         onSubmit() {
             let data = {
                 topicId: this.topicInfo.id,
