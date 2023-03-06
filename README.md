@@ -57,12 +57,6 @@ server {
             root   html;
         }
 
-        # proxy the PHP scripts to Apache listening on 127.0.0.1:80
-        #
-        #location ~ \.php$ {
-        #    proxy_pass   http://127.0.0.1;
-        #}
-
         # deny access to .htaccess files, if Apache's document root
         # concurs with nginx's one
         #
